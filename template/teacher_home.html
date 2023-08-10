@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html>
+  {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/standard/core.min.css">
+  <link rel="stylesheet" id="roboto-subset.css-css" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/mdb5/fonts/roboto-subset.css?ver=3.9.0-update.5" type="text/css" media="all">
+
+  <title>Teachers Home</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .container {
+      width: 80vw;  /* adjust timetable dimensions */
+      height: 70vh;
+    }
+
+    body {
+      /* background-color: #E5BEEC; */
+      background-image: url({% static 'tback.jpg' %});
+      background-size: 1500px;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .logout-button {
+      position:absolute;
+      top:0;
+      right:0;
+      display: inline-block;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none;
+      background-color: #023020;
+      color: #fff;
+      border-radius: 5px;
+    }
+
+    .widget-button {
+      display: inline-block;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none;
+      background-color: #023020;
+      color: #fff;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .timetable {
+      display: grid;
+      grid-template-areas: ". week" "time content";
+      grid-template-columns: 120px;
+      grid-template-rows: 60px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .weekend {
+      background: #ECEFF1;
+      color: #546E7A;
+    }
+
+    .week-names {
+      grid-area: week;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      text-transform: uppercase;
+      font-size: 12px;
+      color:#fbfbfb
+    }
+
+    .week-names > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      box-shadow: inset 1px 0 0 #ECEFF1;
+    }
+    
+    .time-interval {
+      grid-area: time;
+      display: grid;
+      grid-template-rows: repeat(6, 1fr);
+      font-size: 14px;
+      color:#fbfbfb
+      
+    }
+
+    .time-interval > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      box-shadow: inset 0 1px 0 0 #ECEFF1;
+    }
+
+    .content {
+      grid-area: content;
+      display: grid;
+      grid-template-rows: repeat(6, 1fr);
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .content > div {
+      box-shadow: inset 1px 0 0 #ECEFF1, inset 0 1px 0 0 #ECEFF1;
+    }
+
+    .accent-orange-gradient {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #8eeec0, #ff8c94);
+      transition: 0.2s ease box-shadow, 0.2s ease transform;
+    }
+
+    .accent-orange-gradient:hover {
+      box-shadow: 0 20px 30px 0 rgba(255, 140, 148, 0.3);
+      transform: scale(1.05);
+    }
+
+    .accent-cyan-gradient {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #8eeec0, #68c4aa);
+      transition: 0.2s ease box-shadow, 0.2s ease transform;
+    }
+
+    .accent-cyan-gradient:hover {
+      box-shadow: 0 20px 30px 0 rgba(104, 196, 170, 0.3);
+      transform: scale(1.05);
+    }
+
+    .accent-pink-gradient {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #8eeec0, #f16f8d);
+      transition: 0.2s ease box-shadow, 0.2s ease transform;
+    }
+
+    .accent-pink-gradient:hover {
+      box-shadow: 0 20px 30px 0 rgba(241, 111, 141, 0.3);
+      transform: scale(1.05);
+    }
+
+    .accent-purple-gradient {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #8eeec0, #9875ca);
+      transition: 0.2s ease box-shadow, 0.2s ease transform;
+    }
+
+    .accent-purple-gradient:hover {
+      box-shadow: 0 20px 30px 0 rgba(152, 117, 202, 0.3);
+      transform: scale(1.05);
+    }
+
+    #list1 .form-control {
+      border-color: transparent;
+    }
+    #list1 .form-control:focus {
+      border-color: transparent;
+      box-shadow: none;
+    }
+    #list1 .select-input.form-control[readonly]:not([disabled]) {
+      background-color: #fbfbfb;
+    }
+
+    .schedule-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .form-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 150px; /* Adjust the margin value as needed */
+    }
+    
+    .form-container label,
+    .form-container input[type="submit"] {
+      flex-basis: 100%;
+    }
+
+    td {
+      color: white;
+      font-family: "Montserrat", sans-serif;
+      font-weight: bold;
+      overflow: hidden;
+   }
+
+   
+.mask-custom {
+  background: #4077cc;
+  border-radius: 2em;
+  backdrop-filter: blur(25px);
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  background-clip: padding-box;
+  box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
+  margin-top: 850px;
+}
+
+  </style>
+</head>
+<body>
+  <a class="logout-button" href="{% url 'tlogout' %}">Logout</a>
+  <a class="widget-button" href="{% url 'visualize_data' %}">Leave Data Visualization</a>
+  <div class="container">
+      <div class="timetable">
+      <div class="week-names">
+        <div>Monday</div>
+        <div>Tuesday</div>
+        <div>Wednesday</div>
+        <div>Thursday</div>
+        <div>Friday</div>
+      </div>
+      <div class="time-interval">
+        <div>09:00 - 10:00</div>
+        <div>10:00 - 11:00</div>
+        <div>11:10 - 12:00</div>
+        <div>01:00 - 02:00</div>
+        <div>02:00 - 03:00</div>
+        <div>03:00 - 03:45</div>
+      </div>
+      <div class="content">
+        
+        <div>
+          <div class="accent-orange-gradient">
+            <table>
+              <tr>
+                <td name="hnum" value = "">{{hnu.1}}</td>
+                <td name="hname" value = "">{{hna.1}}</td>
+              </tr>
+              <tr> 
+                <td name= "tname" value = "">{{tna.1}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="accent-cyan-gradient"> <table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.2}}</td>
+              <td name="hname" value = "">{{hna.2}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.2}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-pink-gradient"> <table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.3}}</td>
+              <td name="hname" value = "">{{hna.3}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.3}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-purple-gradient"> <table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.4}}</td>
+              <td name="hname" value = "">{{hna.4}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.4}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-orange-gradient"> <table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.5}}</td>
+              <td name="hname" value = "">{{hna.5}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.5}}</td>
+            </tr>
+          </table></div>
+        </div>
+        
+        <div>
+          <div class="accent-cyan-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.6}}</td>
+              <td name="hname" value = "">{{hna.6}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.6}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-pink-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.7}}</td>
+              <td name="hname" value = "">{{hna.7}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.7}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-purple-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.8}}</td>
+              <td name="hname" value = "">{{hna.8}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.8}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-orange-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.9}}</td>
+              <td name="hname" value = "">{{hna.9}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.9}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-cyan-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.10}}</td>
+              <td name="hname" value = "">{{hna.10}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.10}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-pink-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.11}}</td>
+              <td name="hname" value = "">{{hna.11}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.11}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-purple-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.12}}</td>
+              <td name="hname" value = "">{{hna.12}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.12}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-orange-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.13}}</td>
+              <td name="hname" value = "">{{hna.13}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.13}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-cyan-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.14}}</td>
+              <td name="hname" value = "">{{hna.14}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.14}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-pink-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.15}}</td>
+              <td name="hname" value = "">{{hna.15}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.15}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-purple-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.16}}</td>
+              <td name="hname" value = "">{{hna.16}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.16}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-orange-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.17}}</td>
+              <td name="hname" value = "">{{hna.17}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.17}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-cyan-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.18}}</td>
+              <td name="hname" value = "">{{hna.18}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.18}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-pink-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.19}}</td>
+              <td name="hname" value = "">{{hna.19}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.19}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-purple-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.20}}</td>
+              <td name="hname" value = "">{{hna.20}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.20}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-orange-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.21}}</td>
+              <td name="hname" value = "">{{hna.21}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.21}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-cyan-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.22}}</td>
+              <td name="hname" value = "">{{hna.22}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.22}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-pink-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.23}}</td>
+              <td name="hname" value = "">{{hna.23}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.23}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-purple-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.24}}</td>
+              <td name="hname" value = "">{{hna.24}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.24}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-orange-gradient"><table>
+              <tr>
+                <td name="hnum" value = "">{{hnu.25}}</td>
+                <td name="hname" value = "">{{hna.25}}</td>
+              </tr>
+              <tr> 
+                <td name= "tname" value = "">{{tna.25}}</td>
+              </tr>
+            </table></div>
+        </div>
+        <div>
+          <div class="accent-cyan-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.26}}</td>
+              <td name="hname" value = "">{{hna.26}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.26}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-pink-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.27}}</td>
+              <td name="hname" value = "">{{hna.27}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.27}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-purple-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.28}}</td>
+              <td name="hname" value = "">{{hna.28}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.28}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-orange-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.29}}</td>
+              <td name="hname" value = "">{{hna.29}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.29}}</td>
+            </tr>
+          </table></div>
+        </div>
+        <div>
+          <div class="accent-cyan-gradient"><table>
+            <tr>
+              <td name="hnum" value = "">{{hnu.30}}</td>
+              <td name="hname" value = "">{{hna.30}}</td>
+            </tr>
+            <tr> 
+              <td name= "tname" value = "">{{tna.30}}</td>
+            </tr>
+          </table></div>
+        </div>
+      </div>
+    </div>
+
+    <section id="form-section">
+      <form id = "form1" action="{% url 'ttform' %}" method="POST" enctype="multipart/form-data" class = "form-container">
+        {% csrf_token %}
+          <tr><p style="color:white">Edit Hour Details -----------------------------------------------</p></tr>
+          <tr>
+            <td><input type="number" name="hnum" placeholder = "Hour Number" min="1" max="30" required></td>
+            <td><input type="text" name="hname" placeholder = "Hour Name" required></td>
+            <td><input type="text" name= "tname" placeholder = "Teacher Name" required></td>
+          </tr>
+          <input type="submit"  value="Save" style="background-color: rgb(98, 49, 244); color: #eff1f2;">
+
+      </form>
+    </section>
+
+    <section class="vh-100">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col">
+            <div class="card" id="list1" style="border-radius: .75rem; background-color: #eff1f2;">
+              <div class="card-body py-4 px-4 px-md-5">
+    
+                <p class="h1 text-center mt-3 mb-4 pb-3 text-primary">
+                  <i class="fas fa-check-square me-1"></i>
+                  <u>Set Reminders</u>
+                </p>
+    
+                <form id = "form2" action = "{% url 'remform' %}" method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                <div class="pb-2">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex flex-row align-items-center">
+                        <input type="text" required name = "name" class="form-control form-control-lg" id="exampleFormControlInput1"
+                          placeholder="Add new...">
+                          <input type="date" required name = "date" id="datepicker" style="visibility: hidden; position: absolute;">
+                          <label for="datepicker" onclick="document.getElementById('datepicker').showPicker();">
+                            <a href="#!" data-mdb-toggle="tooltip" title="Set due date"><i
+                              class="fas fa-calendar-alt fa-lg me-3"></i></a>
+                          </label>
+                        <div>
+                          <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+    
+                <hr class="my-4">
+    
+                {% comment %} <div class="d-flex justify-content-end align-items-center mb-4 pt-2 pb-3">
+                  <p class="small mb-0 me-2 text-muted">Filter</p>
+                  <select class="select">
+                    <option value="1">All</option>
+                    <option value="2">Completed</option>
+                    <option value="3">Active</option>
+                    <option value="4">Has due date</option>
+                  </select>
+                  <p class="small mb-0 ms-4 me-2 text-muted">Sort</p>
+                  <select class="select">
+                    <option value="1">Added date</option>
+                    <option value="2">Due date</option>
+                  </select>
+                  <a href="#!" style="color: #23af89;" data-mdb-toggle="tooltip" title="Ascending"><i
+                      class="fas fa-sort-amount-down-alt ms-2"></i></a>
+                </div> {% endcomment %}
+    
+                {% comment %} <ul class="list-group list-group-horizontal rounded-0 bg-transparent">
+                  <li
+                    class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
+                    
+                  </li>
+                  <li
+                    class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+                    <p class="lead fw-normal mb-0">Buy groceries for next week</p>
+                  </li>
+                  <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
+                    <div class="d-flex flex-row justify-content-end mb-1">
+                      <a href="#!" class="text-info" data-mdb-toggle="tooltip" title="Edit todo"><i
+                          class="fas fa-pencil-alt me-3"></i></a>
+                      <a href="#!" class="text-danger" data-mdb-toggle="tooltip" title="Delete todo"><i
+                          class="fas fa-trash-alt"></i></a>
+                    </div>
+                    <div class="text-end text-muted">
+                      <a href="#!" class="text-muted" data-mdb-toggle="tooltip" title="Created date">
+                        <p class="small mb-0"><i class="fas fa-info-circle me-2"></i>28th Jun 2020</p>
+                      </a>
+                    </div>
+                  </li>
+                </ul> {% endcomment %}
+                {% for item in data %}
+                    <ul class="list-group list-group-horizontal rounded-0">
+                      <li
+                        class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
+                        
+                      </li>
+                      <li
+                        class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+                        <p class="lead fw-normal mb-0">{{ item.rname }}</p>
+                      </li>
+                      <li class="list-group-item px-3 py-1 d-flex align-items-center border-0 bg-transparent">
+                        <div
+                          class="py-2 px-3 me-2 border border-warning rounded-3 d-flex align-items-center bg-light">
+                          <p class="small mb-0">
+                            <a href="#!" data-mdb-toggle="tooltip" title="Due on date">
+                              <i class="fas fa-hourglass-half me-2 text-warning"></i>
+                            </a>
+                            {{ item.rdate }}
+                          </p>
+                        </div>
+                      </li>
+                      <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
+                        <div class="d-flex flex-row justify-content-end mb-1">
+                          {% comment %} <a href="#!" class="text-info" data-mdb-toggle="tooltip" title="Edit todo"><i
+                              class="fas fa-pencil-alt me-3"></i></a> {% endcomment %}
+                          <button name = "button" onclick= "deleteEntry('{{ item.rname }}')" class="text-danger" data-mdb-toggle="tooltip" title="Delete todo"><i
+                              class="fas fa-trash-alt"></i></a>
+                        {% comment %} </div>
+                        <div class="text-end text-muted">
+                          <a href="#!" class="text-muted" data-mdb-toggle="tooltip" title="Created date">
+                            <p class="small mb-0"><i class="fas fa-info-circle me-2"></i>28th Jun 2020</p>
+                          </a>
+                        </div> {% endcomment %}
+                      </li>
+                    </ul>
+                {% endfor %}
+                
+                {% comment %} <ul class="list-group list-group-horizontal rounded-0 mb-2">
+                  <li
+                    class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
+                    
+                  </li>
+                  <li
+                    class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+                    <p class="lead fw-normal mb-0 bg-light w-100 ms-n2 ps-2 py-1 rounded">Sign up for online
+                      course</p>
+                  </li>
+                  <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
+                    <div class="d-flex flex-row justify-content-end mb-1">
+                      <a href="#!" class="text-danger" data-mdb-toggle="tooltip" title="Delete todo"><i
+                          class="fas fa-trash-alt"></i></a>
+                    </div>
+                    <div class="text-end text-muted">
+                      <a href="#!" class="text-muted" data-mdb-toggle="tooltip" title="Created date">
+                        <p class="small mb-0"><i class="fas fa-info-circle me-2"></i>28th Jun 2020</p>
+                      </a>
+                    </div>
+                  </li>
+                </ul> {% endcomment %}
+    
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- leave section -->
+  <section class="vh-100 gradient-custom-2">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <!-- <div class="col-md-12 col-xl-10"> -->
+  
+          <div class="card mask-custom">
+            <div class="card-body p-4 text-white">
+  
+              <div class="text-center pt-3 pb-2">
+                <img src="https://cdn-icons-png.flaticon.com/512/3387/3387188.png" alt="Check" width="60">
+                <h2 class="my-4">Leave Requests</h2>
+              </div>
+  
+              <table class="table text-white mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Leave type</th>
+                    <th scope="col">Date</th>
+                  </tr>
+                </thead>
+                {% for item in ldata %}
+                <tbody>
+                  <tr class="fw-normal">
+                    <th>
+                      <span class="ms-2">{{ item.namelr }}</span>
+                    </th>
+                    <td class="align-middle">
+                      <span>{{ item.reason }}</span>
+                    </td>
+                    <td class="align-middle">
+                      <h6 class="mb-0"><span class="badge bg-danger">{{ item.leave_type }}</span></h6>
+                    </td>
+                    <td class="align-middle">
+                      <span>{{ item.date }}</span>
+                    </td>
+                  </tr>
+                </tbody>
+                {% endfor %}
+              </table>
+  
+  
+            </div>
+          </div>
+  
+        <!-- </div> -->
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function deleteEntry(name) {
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+            type: "POST",
+            url: "/delete-entry/",
+            data: {
+                name: name,
+                csrfmiddlewaretoken: csrftoken
+            },
+            success: function () {
+                // Refresh the page or update the data as needed
+                location.reload();
+            }
+        });
+    }
+  </script>
+
+</body>
+</html>

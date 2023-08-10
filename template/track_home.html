@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homepage</title>
+  <style>
+/* Reset default margin and padding */
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      overflow: hidden; /* Make the page non-scrollable */
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+    }
+
+.title-bar {
+  display: flex;
+  justify-content: center; /* Center-align the title */
+  align-items: center;
+}
+.back-button {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-size: 50px;
+  cursor: pointer;
+  position: absolute; /* Position the back button absolutely */
+  left: 20px; /* Set the left position of the back button */
+
+}
+
+.back-button::before {
+  content: "\2190"; /* Unicode character for left arrow */
+}
+
+
+    .image-section {
+      display: flex;
+      height: 100vh; /* Set each section to occupy the full viewport height */
+    }
+
+    .image-container {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid #e89f71; /* Add a border to the image container */
+	
+    }
+
+    .image-container a {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-decoration: none;
+      color: #000000;
+      text-align: center;
+    }
+
+    .image-container img {
+      width: 100%; /* Adjust the image width to fit the container */
+      height: auto; /* Let the height adjust proportionally */
+      object-fit: cover; /* Ensure the image covers the container */
+    }
+
+    .image-container h2 {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .image-container p {
+      font-size: 20px;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title-bar">
+      <button onclick="history.back()" class="back-button"></button>
+      <h1>Song Builder</h1>
+    </div>
+  </header>
+	
+  <div class="image-section">
+    <div class="image-container">
+      <a href="makeRequest">
+        <img src="https://img.freepik.com/free-vector/hand-drawn-guitar-design_1176-316.jpg?w=740&t=st=1687097504~exp=1687098104~hmac=1b5d7670f9488593bf14084a4ae805d749612f6a5cd9433e4ba1d79847f77c2a
+" alt="Image 1">
+        <h2>Make a Request</h2>
+        <p>Put in a request to get other musicians to add to your track</p>
+      </a>
+    </div>
+    <div class="image-container">
+      <a href="songPublish">
+        <img src="https://img.freepik.com/free-vector/rock-band-isometric-composition_1284-23938.jpg?w=740&t=st=1687097705~exp=1687098305~hmac=e5ca276210f65e012149046d9c071bed3f9825fb574806c625248eb0c9c3c81f
+" alt="Image 2">
+        <h2>Publish Songs!</h2>
+        <p>Let the world see the track you've made!</p>
+      </a>
+    </div>
+    <div class="image-container">
+      <a href="viewRequest">
+        <img src="https://img.freepik.com/free-vector/hand-drawn-drums_1379-14.jpg?w=900&t=st=1687097641~exp=1687098241~hmac=2949ac322cda91ea71194db4b16041fece44a5394b9b93b73774e2b3cf996235" alt="Image 3">
+        <h2>View Requests</h2>
+        <p>View requests to find tracks you would like to add to</p>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

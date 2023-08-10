@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Song Upload</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .title-bar {
+      background-color: #333;
+      padding: 0.1px;
+      color: #fff;
+      text-align: center;
+    }
+    .back-button {
+      background-color: transparent;
+      border: none;
+      color: #fff;
+      font-size: 50px;
+      cursor: pointer;
+      position: absolute; /* Position the back button absolutely */
+      left: 20px; /* Set the left position of the back button */
+    
+    }
+    
+    .back-button::before {
+      content: "\2190"; /* Unicode character for left arrow */
+    }
+    
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    .image-section {
+      flex: 1;
+      background-image: url("https://img.freepik.com/free-vector/abstract-flat-line-with-music-note-motion-shapes-pattern-cover-design-poster-banner-decoration_460848-15246.jpg?w=826&t=st=1687616181~exp=1687616781~hmac=1628ceb764e31070c74fe575890b69b63afdc197ef08833f271f619452347b54");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .card-section {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: 450px;
+      height: 420px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 10);
+      border-radius: 10px;
+    }
+
+    .card input[type="file"],
+    .card input[type="text"] {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .card button {
+      display: block;
+      width: 20%;
+      margin-bottom: 10px;
+      margin-left: 180px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    .card button:hover {
+      background-color: #45a049;
+    }
+
+    h1 {
+      text-align: center;
+      color: #fff;
+    }
+    h2{
+      text-align:center;
+      color:#000;
+    }
+
+    h3 {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="title-bar">
+    <button onclick="history.back()" class="back-button"></button>
+      <h1>Song Upload</h1>
+  </div>
+  <div class="container">
+    <div class="image-section"></div>
+    <div class="card-section">
+      <div class="card">
+        <h2>Upload Your Song!</h2>
+        <form action="" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          
+          <label for="audiofile">
+            <h3>Add Song</h3>
+          </label>
+          <input type="file" name="audio" accept="audio/*" required/>
+          <label for="artist">
+            <h3>Artist/Artists</h3>
+          </label>
+          <input type="text" name="artist" placeholder="Enter artist name" required/>
+          <label for="title">
+            <h3>Title</h3>
+          </label>
+          <input type="text" name="title" placeholder="Enter song title" required/>
+          <br>
+          <button type="submit">Upload</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Notify Absence</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #E5BEEC;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 800px;
+      margin: 52.5px auto;
+      background-color: #FDE2F3;
+      padding: 21px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+      {% comment %} font-size: 120px {% endcomment %}
+      color: #333;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    input[type="date"],
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+
+    .radio-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .radio-group label {
+      margin-right: 10px;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      background-color: #2A2F4F;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      margin-top: 21px;
+      cursor: pointer;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #917FB3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Notify Absence</h1>
+    <form action = " " method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+      <label for="date">Select Date:</label>
+      <input type="date" id="date" name="date" required>
+
+      <div class="radio-group">
+        <label for="halfDayLeave">Half-day Leave:</label>
+        <input type="radio" id="halfDayLeave" name="leaveType" value="halfDay" required>
+      </div>
+
+      <div class="radio-group">
+        <label for="fullDayLeave">Full-day Leave:</label>
+        <input type="radio" id="fullDayLeave" name="leaveType" value="fullDay" required>
+      </div>
+
+      <label for="reason">Reason for Leave:</label>
+      <input type="text" id="reason" name="reason" required>
+
+      <label for="supportingDocs">Supporting Documents (PDF/JPEG/JPG/PNG) - Optional :</label>
+      <input type="file" id="supportingDocs" name="supportingDocs" accept=".pdf, .jpeg, .jpg, .png">
+
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+</body>
+</html>

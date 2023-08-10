@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-store" />
+
+  <title>Song Builder</title>
+  <style>
+    /* Reset default margin and padding */
+    body, h1, h2, p, button {
+      margin: 0;
+      padding: 0;
+    }
+    
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+    }
+    
+    .title-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+    
+    .logout-button {
+      background-color: #e89f71;
+      color: #fff;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      cursor: pointer;
+      position: absolute; 
+      left: 20px; 
+    }
+    .container {
+      display: flex;
+      height: 100vh;
+      overflow: hidden; /* Prevent scrolling */
+    }
+    
+    .section-one,
+    .section-two {
+      flex-basis: 50%;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .background-one,
+    .background-two {
+      height: 100%;
+      border: 2px solid #e89f71;
+      transition: opacity 0.3s;
+      cursor: pointer;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .background-one {
+      background-image: url("https://img.freepik.com/free-vector/more-music-concept-illustration_114360-1263.jpg?w=740&t=st=1687192528~exp=1687193128~hmac=ea1fbcceef28baaaa87fbca52f933e684e5fcc04ac2abc0c32de412933c449d1");
+    }
+    
+    .background-two {
+      background-image: url("https://img.freepik.com/free-vector/record-player-concept-illustration_114360-6260.jpg?w=740&t=st=1687192628~exp=1687193228~hmac=dd8d9218586bba8e7e925fc2049a6977cb9c7eb9c5c5ab7f3f96c17c179d625a");
+    }
+
+    .content {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      opacity: 0.2;
+      transition: opacity 0.3s;
+    }
+    
+    .section-one:hover .background-one,
+    .section-two:hover .background-two {
+      opacity: 0.7;
+    }
+    
+    .section-one:hover .content,
+    .section-two:hover .content {
+      color: #000;
+      opacity: 1;
+    }
+    
+    h1 {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+    
+    p {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+  </style>
+  <script>
+    function redirectToTrackHome() {
+      window.location.href = "track_home";
+    }
+    
+    function redirectToListen() {
+      window.location.href = "listen";
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="title-bar">
+      <a class="logout-button" href="{% url 'logout_track' %}">Logout</a>
+      <h2>Song Builder</h2>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="section-one">
+      <div class="background-one" onclick="redirectToTrackHome()">
+        <div class="content">
+          <h1>Create a Track</h1>
+          <p><b>Create songs of your design, with the help of the many musicians here.</b></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-two">
+      <div class="background-two" onclick="redirectToListen()">
+        <div class="content">
+          <h1>Listen</h1>
+          <p><b>Check out songs made by other students.</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

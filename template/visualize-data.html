@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Visualization</title>
+    <style>
+        .svg-container {
+          max-width: 100%;
+        }
+        
+        .svg-container svg {
+          width: 100%;
+          height: auto;
+        }
+      </style>
+</head>
+<body>
+    <div class="svg-container">
+        <img src="{% static 'all.svg' %}" alt="All the details">
+    </div>
+    <div class="svg-container">
+        <img src="{% static 'pie.svg' %}" alt="Pie chart">
+    </div>     
+    <div class="svg-container">
+        <img src="{% static 'bubble.svg' %}" alt="Bubble chart">
+    </div>
+    <div class="svg-container">
+        <img src="{% static 'peak.svg' %}" alt="Area graph">
+    </div>
+</body>
+</html>
